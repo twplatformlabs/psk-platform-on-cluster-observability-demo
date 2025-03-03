@@ -1,0 +1,1 @@
+# psk-platform-on-cluster-observability-demo
