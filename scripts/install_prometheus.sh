@@ -10,7 +10,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 
 # perform trivy scan of chart with install configuration
-trivyScan "prometheus-community/prometheus" "prometheus" "$CHART_VERSION" "prometheus-values/$cluster_name-values.yaml"
+trivyScan "prometheus-community/prometheus" "prometheus" "$prometheus_chart_version" "prometheus-values/$cluster_name-values.yaml"
 
 helm upgrade --install prometheus prometheus-community/prometheus \
              --version $prometheus_chart_version \
