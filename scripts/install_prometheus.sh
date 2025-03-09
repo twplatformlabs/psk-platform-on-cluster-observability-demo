@@ -17,7 +17,7 @@ helm upgrade --install prometheus prometheus-community/prometheus \
              --namespace observe \
              --values prometheus-values/$cluster_name-values.yaml
 
-sleep 15
+sleep 30
 
 # deploy oauth2 authentication proxy for alertmanager
 helm upgrade --install prometheus-alertmanager-oauth2-proxy chart/oauth2-proxy \
