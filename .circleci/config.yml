@@ -105,25 +105,32 @@ workflows:
           auth-tenant: dev-pskctl
           filters: *on-push-main
 
-  # release prod-i01-aws-us-east-2 observability demo:
-  #   jobs:
-  #     - do/gh-release:
-  #         name: generate release notes
-  #         context: *context
-  #         notes-from-file: release.md
-  #         include-commit-msg: true
-  #         before-release:
-  #           - op/env:
-  #               env-file: op.prod-i01-aws-us-east-2.env
-  #         after-release:
-  #           - do/slack-bot:
-  #               channel: lab-events
-  #               message: Release psk-aws-control-plane-extensions
-  #               include-link: true
-  #               include-tag: true
-  #         requires:
-  #           - deploy prod-i01-aws-us-east-2 extensions
-  #         filters: *on-tag-main
+  release prod-i01-aws-us-east-2 observability demo:
+    jobs:
+      - deploy observability demo:
+          name: deploy prod-i01-aws-us-east-2 observability demo
+          context: *context
+          cluster: prod-i01-aws-us-east-2
+          auth-tenant: pskctl
+          filters: *on-tag-main
+
+      - do/gh-release:
+          name: generate release notes
+          context: *context
+          notes-from-file: release.md
+          include-commit-msg: true
+          before-release:
+            - op/env:
+                env-file: op.prod-i01-aws-us-east-2.env
+          after-release:
+            - do/slack-bot:
+                channel: lab-events
+                message: Release psk-platform-on-cluster-observability-demo
+                include-link: true
+                include-tag: true
+          requires:
+            - deploy prod-i01-aws-us-east-2 observability demo
+          filters: *on-tag-main
 
   #     - do/schedule-pipeline:
   #         name: schedule nightly integration tests
