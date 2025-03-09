@@ -1,0 +1,152 @@
+---
+version: 2.1
+
+orbs:
+  terraform: twdps/terraform@3.1.1
+  kube: twdps/kube-ops@1.1.2
+  op: twdps/onepassword@3.0.0
+  do: twdps/pipeline-events@5.0.1
+
+globals:
+  - &context platform
+  - &executor-image twdps/circleci-kube-ops:alpine-3.2.1
+
+on-push-main: &on-push-main
+  branches:
+    only: /main/
+  tags:
+    ignore: /.*/
+
+on-tag-main: &on-tag-main
+  branches:
+    ignore: /.*/
+  tags:
+    only: /.*/
+
+commands:
+
+  set-environment:
+    description: generate environment credentials and configuration from templates
+    parameters:
+      cluster:
+        description: cluster and tf workspace name
+        type: string
+    steps:
+      - op/env:
+          env-file: op.<< parameters.cluster >>.env
+      # - op/tpl:
+      #     tpl-path: environments
+      #     tpl-file: << parameters.cluster >>.auto.tfvars.json
+      - kube/op-config:
+          op-value: platform/<< parameters.cluster >>/kubeconfig-base64
+      # - terraform/terraformrc
+      - do/bash-functions
+
+  run-integration-tests:
+    parameters:
+      cluster:
+        description: cluster and tf workspace name
+        type: string
+    steps:
+      - run:
+          name: run control plane services state test
+          command: bats test/observability-demo-state-test.bats
+
+jobs:
+
+  deploy observability demo:
+    docker:
+      - image: *executor-image
+    parameters:
+      cluster:
+        description: cluster name
+        type: string
+      auth-tenant:
+        description: Auth0.com tenant
+        type: string
+    steps:
+      - checkout
+      - set-environment:
+          cluster: << parameters.cluster >>
+      - run:
+          name: create observability ns and pvc
+          command: bash scripts/observability_demo_setup.sh << parameters.cluster >>
+      - run:
+          name: deploy prometheus with alertmanager
+          command: bash scripts/install_prometheus.sh << parameters.cluster >>
+      - run-integration-tests:
+           cluster: << parameters.cluster >>
+
+  # integration tests:
+  #   docker:
+  #     - image: *executor-image
+  #   parameters:
+  #     cluster:
+  #       description: cluster name
+  #       type: string
+  #   steps:
+  #     - checkout
+  #     - set-environment:
+  #         cluster: << parameters.cluster >>
+  #     - run-integration-tests:
+  #          cluster: << parameters.cluster >>
+
+workflows:
+
+  deploy sbx-i01-aws-us-east-1 observability demo:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    jobs:
+      - deploy observability demo:
+          name: deploy sbx-i01-aws-us-east-1 observability demo
+          context: *context
+          cluster: sbx-i01-aws-us-east-1
+          auth-tenant: dev-pskctl
+          filters: *on-push-main
+
+  # release prod-i01-aws-us-east-2 observability demo:
+  #   jobs:
+  #     - do/gh-release:
+  #         name: generate release notes
+  #         context: *context
+  #         notes-from-file: release.md
+  #         include-commit-msg: true
+  #         before-release:
+  #           - op/env:
+  #               env-file: op.prod-i01-aws-us-east-2.env
+  #         after-release:
+  #           - do/slack-bot:
+  #               channel: lab-events
+  #               message: Release psk-aws-control-plane-extensions
+  #               include-link: true
+  #               include-tag: true
+  #         requires:
+  #           - deploy prod-i01-aws-us-east-2 extensions
+  #         filters: *on-tag-main
+
+  #     - do/schedule-pipeline:
+  #         name: schedule nightly integration tests
+  #         context: *context
+  #         scheduled-pipeline-name: nightly control plane extensions integration tests
+  #         scheduled-pipeline-description: |
+  #           Automatically triggers nightly run of control plane extensions integration tests
+  #         hours-of-day: "[1]"
+  #         days-of-week: "[\"SUN\"]"
+  #         before-schedule:
+  #           - op/env:
+  #               env-file: op.prod-i01-aws-us-east-2.env
+  #         filters: *on-tag-main
+
+  # run nightly integration tests:
+  #   when:
+  #       equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+  #   jobs:
+  #     - integration tests:
+  #         name: nightly sbx-i01-aws-us-east-1 integration tests
+  #         context: *context
+  #         cluster: sbx-i01-aws-us-east-1
+  #     - integration tests:
+  #         name: nightly prod-i01-aws-us-east-2 integration tests
+  #         context: *context
+  #         cluster: prod-i01-aws-us-east-2
