@@ -1,0 +1,17 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "oauth2-proxy.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "oauth2-proxy.labels" . | nindent 4 }}
+spec:
+  action: ALLOW
+  rules:
+    - from:
+      - source:
+          {{ include "oauth2-proxy.authpolicysa" . }}
+  selector:
+    matchLabels:
+      app: {{ .Values.authApp.name }}

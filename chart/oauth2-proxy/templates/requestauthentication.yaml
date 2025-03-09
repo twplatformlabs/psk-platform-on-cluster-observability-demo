@@ -1,0 +1,15 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: {{ include "oauth2-proxy.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "oauth2-proxy.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "oauth2-proxy.selectorLabels" . | nindent 6 }}
+  jwtRules:
+  - issuer: "{{ .Values.tenant }}"
+    jwksUri: "{{ .Values.tenant }}.well-known/jwks.json"

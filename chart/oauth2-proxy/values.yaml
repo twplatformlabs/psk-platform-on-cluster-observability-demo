@@ -1,0 +1,87 @@
+nameOverride: ""
+fullnameOverride: "" # expects this to be defined for each deployment
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+service:
+  name: oauth2-proxy
+  type: ClusterIP
+  portname: oauth2-proxy
+  port: 80
+  protocol: TCP
+  targetPort: 4180
+
+virtualService: {}
+  # hosts: "https://alertmanager.sbx-i01-aws-us-east-1.twplatformlabs.org"
+  # gateways: "istio-system/sbx-i01-aws-us-east-1-twplatformlabs-org-gateway"
+  # matchUrl: /oauth2/
+
+authApp:
+  name: ""
+  upstream: ""
+  # name: "prometheus-alertmanager"
+  # upstream: "http://prometheus-alertmanager.observe.svc.cluster.local:9093"
+
+tenant: ""
+# E.g., "https://pskctl.us.auth0.com/"
+
+
+image:
+  repository: quay.io/oauth2-proxy
+  name: oauth2-proxy
+  tag: ""
+  pullPolicy: Always
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 100%
+    maxUnavailable: 100%
+
+podSecurityContext: {}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: ["ALL"]
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 10m
+    memory: 32Mi
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+#  targetMemoryUtilizationPercentage: 80
+  annotations: {}
+
+affinity: {}
+
+nodeSelector:
+  nodegroup: management-arm-rkt-mng
+
+tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "management"
+    effect: "NoSchedule"
+topologySpreadConstraints: {}

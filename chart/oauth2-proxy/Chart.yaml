@@ -1,0 +1,6 @@
+apiVersion: v2
+name: oauth2-proxy
+description: Helm chart for oatuh2-proxy frontend to auto0 web app authentication
+type: application
+version: "0.1.0"
+appVersion: "7.6.0"
