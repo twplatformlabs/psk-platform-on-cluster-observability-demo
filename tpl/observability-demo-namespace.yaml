@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observe
+  labels:
+    istio-injection: enabled
+    pod-security.kubernetes.io/audit: baseline
+
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: observe-ns-quota
+  namespace: observe
+spec:
+  hard:
+    requests.cpu: "2"
+    requests.memory: 2Gi
+    limits.cpu: "10"
+    limits.memory: 20Gi
