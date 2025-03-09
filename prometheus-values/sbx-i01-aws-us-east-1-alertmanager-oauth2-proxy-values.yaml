@@ -1,0 +1,13 @@
+fullnameOverride: prometheus-alertmanager-oauth2-proxy
+
+virtualService:
+  hosts: alertmanager.sbx-i01-aws-us-east-1.twplatformlabs.org
+  gateways: istio-system/sbx-i01-aws-us-east-1-twplatformlabs-org-gateway
+  matchUrl: /oauth2/
+
+authApp:
+  name: prometheus-alertmanager
+  upstream: http://prometheus-alertmanager.observe.svc.cluster.local:9093
+
+tenant: https://dev-pskctl.us.auth0.com/
+

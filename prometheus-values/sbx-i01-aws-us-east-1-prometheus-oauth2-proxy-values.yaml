@@ -1,0 +1,12 @@
+fullnameOverride: prometheus-server-oauth2-proxy
+
+virtualService:
+  hosts: prometheus.sbx-i01-aws-us-east-1.twplatformlabs.org
+  gateways: istio-system/sbx-i01-aws-us-east-1-twplatformlabs-org-gateway
+  matchUrl: /oauth2/
+
+authApp:
+  name: prometheus-server
+  upstream: http://prometheus-server.observe.svc.cluster.local:80
+
+tenant: https://dev-pskctl.us.auth0.com/
