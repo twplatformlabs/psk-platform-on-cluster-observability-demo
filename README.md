@@ -9,6 +9,7 @@
 
 On-cluster, all-in-one observability demo components to =host demonstration resource on a Kubernetes cluster for observability tooling. This is not a production or platform-oriented configuration and is intented only for provide a simnulated observability service for developing starter kits of testing integration patterns.  
 
+
 **Based on**
 
 prometheus
