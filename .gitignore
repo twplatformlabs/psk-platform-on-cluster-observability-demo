@@ -5,3 +5,4 @@ working.md
 bash-functions.sh
 prometheus-values/pvc.yaml
 test.yaml
+test.sh
