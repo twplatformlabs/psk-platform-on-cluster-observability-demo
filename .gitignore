@@ -6,3 +6,5 @@ bash-functions.sh
 prometheus-values/pvc.yaml
 test.yaml
 test.sh
+grafana-values/grafana-oauth-secrets.yaml
+grafana-values/grafana-virtualservice.yaml
