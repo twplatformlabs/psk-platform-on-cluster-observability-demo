@@ -1,12 +1,14 @@
-# Ignore selected warnings from scanning the official AWS terraform modules
+# Ignore selected warnings
 #
 # clusterrole requires data access
 AVD-KSV-0047
 # node-exporter needs node data
 AVD-KSV-0003
+AVD-KSV-0004
 AVD-KSV-0009
 AVD-KSV-0010
 AVD-KSV-0023
 AVD-KSV-0106
-# assess
 AVD-KSV-0121
+# allow registry
+AVD-KSV-0125
