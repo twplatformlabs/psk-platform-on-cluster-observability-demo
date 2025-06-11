@@ -80,7 +80,7 @@ server:
     ## Prometheus server data Persistent Volume existing claim name
     ## Requires server.persistentVolume.enabled: true
     ## If defined, PVC must be created manually before volume will be bound
-    existingClaim: "prometheus-ebs-pvc"
+    existingClaim: "prometheus-efs-pvc"
 
     ## Prometheus server data Persistent Volume mount root path
     ##
@@ -97,7 +97,7 @@ server:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "sbx-i01-aws-us-east-1-ebs-csi-dynamic-storage"
+    storageClass: "sbx-i01-aws-us-east-1-efs-csi-dynamic-storage"
 
     ## Subdirectory of Prometheus server data Persistent Volume to mount
     ## Useful if the volume's root directory is not empty
@@ -338,7 +338,7 @@ alertmanager:
 
   persistence:
     size: 4Gi
-    storageClass: "sbx-i01-aws-us-east-1-ebs-csi-dynamic-storage"
+    storageClass: "sbx-i01-aws-us-east-1-efs-csi-dynamic-storage"
 
   resources:
     requests:

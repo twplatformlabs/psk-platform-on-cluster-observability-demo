@@ -4,9 +4,7 @@ source bash-functions.sh
 
 cluster_name=$1
 prometheus_chart_version=$(jq -er .prometheus_chart_version environments/$cluster_name.json)
-echo "prometheus version $prometheus_chart_version"
-echo "debug"
-echo "id ${OAUTH2_PROXY_CLIENT_ID:0:7}"
+echo "prometheus chart version $prometheus_chart_version"
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
