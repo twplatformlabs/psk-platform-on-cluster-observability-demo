@@ -1,3 +1,4 @@
 {
-  "prometheus_chart_version": "27.5.1"
+  "prometheus_chart_version": "27.20.0",
+  "grafana_chart_version": "8.10.3"
 }
