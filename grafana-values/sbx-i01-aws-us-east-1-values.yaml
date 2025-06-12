@@ -1,4 +1,3 @@
-
 replicas: 1
 
 podDisruptionBudget: #{}
@@ -7,13 +6,11 @@ podDisruptionBudget: #{}
 deploymentStrategy:
   type: Recreate
 
-
 image:
   pullPolicy: Always
 
 testFramework:
   enabled: true
-  image:
   imagePullPolicy: Always
   securityContext: {}
   containerSecurityContext: {}
@@ -40,7 +37,6 @@ containerSecurityContext:
   seccompProfile:
     type: RuntimeDefault
 
-
 downloadDashboardsImage:
   pullPolicy: Always
 
@@ -66,12 +62,12 @@ downloadDashboards:
       type: RuntimeDefault
 
 resources:
- limits:
-   cpu: 100m
-   memory: 128Mi
- requests:
-   cpu: 100m
-   memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector:
   nodegroup: management-arm-rkt-mng
