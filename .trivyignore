@@ -2,6 +2,7 @@
 #
 # clusterrole requires data access
 AVD-KSV-0047
+AVD-KSV-0041
 # node-exporter needs node data
 AVD-KSV-0003
 AVD-KSV-0004
