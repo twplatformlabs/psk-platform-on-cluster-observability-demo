@@ -22,7 +22,7 @@ server:
     existingClaim: "prometheus-efs-pvc"
     mountPath: /data
     size: 8Gi
-    storageClass: "sbx-i01-aws-us-east-1-efs-csi-dynamic-storage"
+    storageClass: "prod-i01-aws-us-east-2-efs-csi-dynamic-storage"
   resources:
     limits:
       cpu: 500m
@@ -56,7 +56,7 @@ alertmanager:
     minAvailable: 0
   persistence:
     size: 4Gi
-    storageClass: "sbx-i01-aws-us-east-1-efs-csi-dynamic-storage"
+    storageClass: "prod-i01-aws-us-east-2-efs-csi-dynamic-storage"
   resources:
     requests:
       cpu: 10m

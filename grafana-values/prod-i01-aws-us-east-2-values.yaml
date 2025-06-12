@@ -85,7 +85,7 @@ tolerations:
 persistence:
   type: pvc
   enabled: true
-  storageClassName: "sbx-i01-aws-us-east-1-efs-csi-dynamic-storage"
+  storageClassName: "prod-i01-aws-us-east-2-efs-csi-dynamic-storage"
   accessModes:
     - ReadWriteOnce
   size: 10Gi
@@ -110,7 +110,7 @@ datasources:
 
 grafana.ini:
   server:
-    root_url: https://grafana.sbx-i01-aws-us-east-1.twplatformlabs.org
+    root_url: https://grafana.prod-i01-aws-us-east-2.twplatformlabs.org
 
 sidecar:
   imagePullPolicy: Always

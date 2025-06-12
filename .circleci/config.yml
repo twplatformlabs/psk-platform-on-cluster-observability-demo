@@ -62,13 +62,13 @@ jobs:
       - set-environment:
           cluster: << parameters.cluster >>
       - run:
-          name: create observability ns and pvc
+          name: create observability ns and pvcs
           command: bash scripts/observability_demo_setup.sh << parameters.cluster >>
       - run:
           name: deploy prometheus with alertmanager
           command: bash scripts/install_prometheus.sh << parameters.cluster >>
       - run:
-          name: deploy prometheus with alertmanager
+          name: deploy grafana
           command: bash scripts/install_grafana.sh << parameters.cluster >>
       - run-integration-tests:
            cluster: << parameters.cluster >>
@@ -108,23 +108,23 @@ workflows:
           cluster: prod-i01-aws-us-east-2
           filters: *on-tag-main
 
-      - do/gh-release:
-          name: generate release notes
-          context: *context
-          notes-from-file: release.md
-          include-commit-msg: true
-          before-release:
-            - op/env:
-                env-file: op.prod-i01-aws-us-east-2.env
-          after-release:
-            - do/slack-bot:
-                channel: lab-events
-                message: Release psk-platform-on-cluster-observability-demo
-                include-link: true
-                include-tag: true
-          requires:
-            - deploy prod-i01-aws-us-east-2 observability demo
-          filters: *on-tag-main
+      # - do/gh-release:
+      #     name: generate release notes
+      #     context: *context
+      #     notes-from-file: release.md
+      #     include-commit-msg: true
+      #     before-release:
+      #       - op/env:
+      #           env-file: op.prod-i01-aws-us-east-2.env
+      #     after-release:
+      #       - do/slack-bot:
+      #           channel: lab-events
+      #           message: Release psk-platform-on-cluster-observability-demo
+      #           include-link: true
+      #           include-tag: true
+      #     requires:
+      #       - deploy prod-i01-aws-us-east-2 observability demo
+      #     filters: *on-tag-main
 
   #     - do/schedule-pipeline:
   #         name: schedule nightly integration tests
