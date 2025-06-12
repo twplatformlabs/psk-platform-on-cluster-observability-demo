@@ -46,7 +46,9 @@ commands:
     steps:
       - run:
           name: run control plane services state test
-          command: bats test/observability-demo-state-test.bats
+          command: |
+            sleep 30
+            bats test/observability-demo-state-test.bats
 
 jobs:
 
