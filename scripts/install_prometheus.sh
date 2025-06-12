@@ -35,4 +35,4 @@ helm upgrade --install prometheus-server-oauth2-proxy chart/oauth2-proxy \
      --set env.OAUTH2_PROXY_CLIENT_SECRET="${OAUTH2_PROXY_CLIENT_SECRET}" \
      --set env.OAUTH2_PROXY_COOKIE_SECRET="${OAUTH2_PROXY_COOKIE_SECRET}" \
      --values chart/oauth2-proxy/values.yaml \
-     --values prometheus-values/sbx-i01-aws-us-east-1-prometheus-oauth2-proxy-values.yaml \
+     --values prometheus-values/$cluster_name-prometheus-oauth2-proxy-values.yaml \

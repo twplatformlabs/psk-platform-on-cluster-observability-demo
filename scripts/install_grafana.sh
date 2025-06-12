@@ -44,9 +44,9 @@ metadata:
     app.kubernetes.io/instance: grafana
 spec:
   hosts:
-    - grafana.sbx-i01-aws-us-east-1.twplatformlabs.org
+    - grafana.$cluster_name.twplatformlabs.org
   gateways:
-    - istio-system/sbx-i01-aws-us-east-1-twplatformlabs-org-gateway
+    - istio-system/$cluster_name-twplatformlabs-org-gateway
   http:
     - route:
       - destination:
