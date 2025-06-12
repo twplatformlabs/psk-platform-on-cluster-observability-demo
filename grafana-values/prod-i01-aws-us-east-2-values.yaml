@@ -13,17 +13,16 @@ image:
 
 testFramework:
   enabled: true
-  image:
   imagePullPolicy: Always
   securityContext: {}
   containerSecurityContext: {}
   resources:
-   limits:
-     cpu: 100m
-     memory: 128Mi
-   requests:
-     cpu: 100m
-     memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 securityContext:
   runAsNonRoot: true

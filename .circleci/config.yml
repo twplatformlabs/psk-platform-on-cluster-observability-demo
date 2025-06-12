@@ -41,11 +41,11 @@ commands:
   run-integration-tests:
     parameters:
       cluster:
-        description: cluster and tf workspace name
+        description: cluster name
         type: string
     steps:
       - run:
-          name: run control plane services state test
+          name: run observability services state test
           command: |
             sleep 30
             bats test/observability-demo-state-test.bats
