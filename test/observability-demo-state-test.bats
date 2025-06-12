@@ -1,5 +1,6 @@
 #!/usr/bin/env bats
 
+# Prometheus smoke tests
 @test "prometheus-server status is Running" {
   run bash -c "kubectl get po -n observe -l app.kubernetes.io/name=prometheus -o wide | grep 'prometheus-server'"
   [[ "${output}" =~ "Running" ]]
@@ -22,5 +23,11 @@
 
 @test "prometheus-server oauth2-proxies status is Running" {
   run bash -c "kubectl get po -n observe -l app.kubernetes.io/name=prometheus-server-oauth2-proxy -o wide | grep 'prometheus-server-oauth2-proxy'"
+  [[ "${output}" =~ "Running" ]]
+}
+
+# Grafana smoke tests
+@test "grafana status is Running" {
+  run bash -c "kubectl get po -n observe -o wide | grep 'grafana'"
   [[ "${output}" =~ "Running" ]]
 }

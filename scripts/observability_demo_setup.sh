@@ -25,3 +25,22 @@ spec:
       storage: 8Gi
 EOF
 kubectl apply -f prometheus-values/pvc.yaml
+
+# create grafana efs-csi persistent volume claim
+echo "create persistent volume claims for grafana"
+cat <<EOF > grafana-values/pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-efs-pvc
+  namespace: observe
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ${cluster_name}-efs-csi-dynamic-storage
+  resources:
+    requests:
+      storage: 8Gi
+EOF
+kubectl apply -f grafana-values/pvc.yaml
