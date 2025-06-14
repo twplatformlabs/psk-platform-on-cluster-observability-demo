@@ -31,3 +31,14 @@
   run bash -c "kubectl get po -n observe -o wide | grep 'grafana'"
   [[ "${output}" =~ "Running" ]]
 }
+
+# otel collector smoke tests
+@test "node otel-collector agent status is Running" {
+  run bash -c "kubectl get po -n observe -l name=node-opentelemetry-collector -o wide | grep 'node-opentelemetry-collector'"
+  [[ "${output}" =~ "Running" ]]
+}
+
+@test "node otel-collector agent status is Running" {
+  run bash -c "kubectl get po -n observe -l name=cluster-opentelemetry-collector -o wide | grep 'cluster-opentelemetry-collector'"
+  [[ "${output}" =~ "Running" ]]
+}

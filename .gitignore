@@ -8,5 +8,4 @@ test.yaml
 test.sh
 grafana-values/grafana-oauth-secrets.yaml
 grafana-values/grafana-virtualservice.yaml
-sbx-i01-aws-us-east-1.json
-prod-i01-aws-us-east-2.json
+opentelemetry-values/honeycomb-secret.yaml

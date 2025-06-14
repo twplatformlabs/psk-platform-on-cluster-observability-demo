@@ -72,6 +72,9 @@ jobs:
       - run:
           name: deploy grafana
           command: bash scripts/install_grafana.sh << parameters.cluster >>
+      - run:
+          name: deploy otel
+          command: bash scripts/install_opentelemetry.sh << parameters.cluster >>
       - run-integration-tests:
            cluster: << parameters.cluster >>
 

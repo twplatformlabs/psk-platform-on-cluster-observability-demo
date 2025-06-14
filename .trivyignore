@@ -13,3 +13,5 @@ AVD-KSV-0106
 AVD-KSV-0121
 # allow registry
 AVD-KSV-0125
+# otel daemonsets make available hostports for collection
+AVD-KSV-0024

@@ -1,0 +1,128 @@
+mode: daemonset
+
+image:
+  repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
+  pullPolicy: Always
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 0
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+securityContext:
+  runAsUser: 65532
+  runAsNonRoot: true
+  runAsGroup: 65532
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: "RuntimeDefault"
+
+# Required to use the kubeletstats cpu/memory utilization metrics
+clusterRole:
+  create: true
+  rules:
+    - apiGroups: 
+        - ""
+      resources:
+        - nodes/proxy
+        - nodes
+        - pods
+      verbs:
+        - get
+        - list
+        - watch
+
+extraEnvs:
+  - name: HONEYCOMB_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: honeycomb
+        key: api-key
+
+presets:
+  # enables the k8sattributesprocessor and adds it to the traces, metrics, and logs pipelines
+  kubernetesAttributes:
+    enabled: true
+    extractAllPodLabels: true
+    extractAllPodAnnotations: true
+  # enables the kubeletstatsreceiver and adds it to the metrics pipelines
+  kubeletMetrics:
+    enabled: true
+
+config:
+  receivers:
+    jaeger: null
+      # protocols:
+      #   grpc:
+      #     endpoint: ${env:MY_POD_IP}:14250
+      #   thrift_http:
+      #     endpoint: ${env:MY_POD_IP}:14268
+      #   thrift_compact:
+      #     endpoint: ${env:MY_POD_IP}:6831
+    zipkin: null
+    kubeletstats:
+      insecure_skip_verify: true
+      collection_interval: 30s
+      metric_groups:
+        - node
+        - pod
+      metrics:
+        k8s.node.uptime:
+          enabled: true
+        k8s.pod.uptime:
+          enabled: true
+        k8s.pod.cpu_limit_utilization:
+          enabled: true
+        k8s.pod.cpu_request_utilization:
+          enabled: true
+        k8s.pod.memory_limit_utilization:
+          enabled: true
+        k8s.pod.memory_request_utilization:
+          enabled: true
+
+  exporters:
+    otlp:
+      endpoint: "api.honeycomb.io:443" # US instance
+      #endpoint: "api.eu1.honeycomb.io:443" # EU instance
+      headers:
+        "x-honeycomb-team": "${env:HONEYCOMB_API_KEY}"
+    otlp/k8s-metrics:
+      endpoint: "api.honeycomb.io:443" # US instance
+      #endpoint: "api.eu1.honeycomb.io:443" # EU instance
+      headers:
+        "x-honeycomb-team": "${env:HONEYCOMB_API_KEY}"
+        "x-honeycomb-dataset": "k8s-metrics"
+    otlp/k8s-logs:
+      endpoint: "api.honeycomb.io:443" # US instance
+      #endpoint: "api.eu1.honeycomb.io:443" # EU instance
+      headers:
+        "x-honeycomb-team": "${env:HONEYCOMB_API_KEY}"
+        "x-honeycomb-dataset": "k8s-logs"
+
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp]
+        exporters: [otlp]
+      metrics:
+        exporters: [otlp/k8s-metrics]
+      logs:
+        exporters: [otlp/k8s-logs]
+
+ports:
+  jaeger-compact:
+    enabled: false
+  jaeger-thrift:
+    enabled: false
+  jaeger-grpc:
+    enabled: false
+  zipkin:
+    enabled: false
