@@ -7,8 +7,18 @@ opentelemetry_collector_chart_version=$(jq -er .opentelemetry_collector_chart_ve
 echo "opentelemetry-collector chart version $opentelemetry_collector_chart_version"
 
 # deploy honeycomb api-key
-kubectl create secret generic honeycomb --from-literal=api-key=$HONEYCOMB_API_KEY --namespace=observe
-sleep 10
+cat <<EOF > opentelemetry-values/honeycomb-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: honeycomb
+  namespace: observe
+type: Opaque
+data:
+  api-key: ${HONEYCOMB_API_KEY}
+EOF
+kubectl apply -f opentelemetry-values/honeycomb-secret.yaml
+sleep 10 
 
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
 helm repo update
