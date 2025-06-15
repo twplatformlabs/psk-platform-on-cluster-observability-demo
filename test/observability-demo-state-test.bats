@@ -38,7 +38,7 @@
   [[ "${output}" =~ "Running" ]]
 }
 
-@test "node otel-collector agent status is Running" {
+@test "cluster otel-collector agent status is Running" {
   run bash -c "kubectl get po -n observe -l name=cluster-opentelemetry-collector -o wide | grep 'cluster-opentelemetry-collector'"
   [[ "${output}" =~ "Running" ]]
 }
