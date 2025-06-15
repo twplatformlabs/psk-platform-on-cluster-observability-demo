@@ -34,11 +34,11 @@
 
 # otel collector smoke tests
 @test "node otel-collector agent status is Running" {
-  run bash -c "kubectl get po -n observe -l name=node-opentelemetry-collector -o wide | grep 'node-opentelemetry-collector'"
+  run bash -c "kubectl get po -n observe -l app.kubernetes.io/instance=node -o wide | grep 'node'"
   [[ "${output}" =~ "Running" ]]
 }
 
 @test "cluster otel-collector agent status is Running" {
-  run bash -c "kubectl get po -n observe -l name=cluster-opentelemetry-collector -o wide | grep 'cluster-opentelemetry-collector'"
+  run bash -c "kubectl get po -n observe -l app.kubernetes.io/instance=cluster -o wide | grep 'cluster'"
   [[ "${output}" =~ "Running" ]]
 }

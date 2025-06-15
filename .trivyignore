@@ -15,3 +15,5 @@ AVD-KSV-0121
 AVD-KSV-0125
 # otel daemonsets make available hostports for collection
 AVD-KSV-0024
+# trivy objects to securityContext on otel daemonset agent, though the config is exactly what it recommends
+AVD-KSV-0118
