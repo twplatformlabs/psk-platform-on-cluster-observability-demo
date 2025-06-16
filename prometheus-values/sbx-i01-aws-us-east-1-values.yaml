@@ -55,7 +55,7 @@ server:
   lifecycle:
     postStart:
       exec:
-        command: ["sh", "-c", "rm -rf /data/wal"]
+        command: ["bash", "-c", "rm -rf /data/wal"]
 
 serverFiles:
   prometheus.yml:
@@ -124,7 +124,10 @@ prometheus-node-exporter:
     seccompProfile:
       type: RuntimeDefault
   tolerations:
-    - operator: "Exists"
+    - key: "dedicated"
+      operator: "Equal"
+      value: "management"
+      effect: "NoSchedule"
 
 prometheus-pushgateway:
   enabled: false

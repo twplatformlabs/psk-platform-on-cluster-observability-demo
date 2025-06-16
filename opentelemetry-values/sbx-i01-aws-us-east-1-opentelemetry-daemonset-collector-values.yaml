@@ -25,8 +25,12 @@ securityContext:
   seccompProfile:
     type: "RuntimeDefault"
 
+# include management node group
 tolerations:
-  - operator: "Exists"
+    - key: "dedicated"
+      operator: "Equal"
+      value: "management"
+      effect: "NoSchedule"
 
 # Required to use the kubeletstats cpu/memory utilization metrics
 clusterRole:
@@ -77,6 +81,7 @@ config:
       collection_interval: 30s
       metric_groups:
         - node
+        - replicasets
         - pod
       metrics:
         k8s.node.uptime:
