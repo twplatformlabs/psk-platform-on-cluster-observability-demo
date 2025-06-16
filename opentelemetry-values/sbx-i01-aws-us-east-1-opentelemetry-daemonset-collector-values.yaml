@@ -81,7 +81,6 @@ config:
       collection_interval: 30s
       metric_groups:
         - node
-        - container
         - pod
       metrics:
         k8s.node.uptime:
