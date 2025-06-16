@@ -48,6 +48,18 @@ server:
   retention: "7d"
   retentionSize: "7GB"
 
+  # these settings are to del with the fact that Prometeus doesn't support EFS
+  extraArgs:
+    storage.tsdb.min-block-duration: 15m
+    storage.tsdb.max-block-duration: 15m
+    remote-write.flush-interval: 15s
+    storage.tsdb.retention.time: 6h
+  lifecycle:
+    postStart:
+      exec:
+        command: ["sh", "-c", "rm -rf /data/wal"]
+
+
 alertmanager:
   enabled: true
   image:
@@ -107,10 +119,7 @@ prometheus-node-exporter:
     seccompProfile:
       type: RuntimeDefault
   tolerations:
-    - key: "dedicated"
-      operator: "Equal"
-      value: "management"
-      effect: "NoSchedule"
+    - operator: "Exists"
 
 prometheus-pushgateway:
   enabled: false
