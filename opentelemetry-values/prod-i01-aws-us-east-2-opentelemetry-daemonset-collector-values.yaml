@@ -25,6 +25,9 @@ securityContext:
   seccompProfile:
     type: "RuntimeDefault"
 
+tolerations:
+  - operator: "Exists"
+  
 # Required to use the kubeletstats cpu/memory utilization metrics
 clusterRole:
   create: true
