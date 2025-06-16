@@ -106,8 +106,6 @@ prometheus-node-exporter:
     runAsGroup: 65532
     seccompProfile:
       type: RuntimeDefault
-  nodeSelector:
-    nodegroup: management-arm-rkt-mng
   tolerations:
     - key: "dedicated"
       operator: "Equal"
