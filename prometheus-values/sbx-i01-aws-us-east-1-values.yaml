@@ -54,6 +54,7 @@ server:
     storage.tsdb.max-block-duration: 15m
     remote-write.flush-interval: 15s
     storage.tsdb.retention.time: 6h
+    kubernetes.sd-endpoints-slice: "true"
   lifecycle:
     postStart:
       exec:

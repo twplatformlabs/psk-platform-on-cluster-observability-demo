@@ -47,7 +47,7 @@ commands:
       - run:
           name: run observability services state test
           command: |
-            sleep 30
+            sleep 45
             bats test/observability-demo-state-test.bats
 
 jobs:
