@@ -37,6 +37,7 @@ clusterRole:
       resources:
         - nodes/proxy
         - nodes
+        - replicasets
         - pods
       verbs:
         - get
